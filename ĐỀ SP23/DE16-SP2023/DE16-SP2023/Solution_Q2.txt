@@ -1,0 +1,320 @@
+//===========================================================================
+//(2)===YOU CAN EDIT OR EVEN ADD NEW FUNCTIONS IN THE FOLLOWING PART========
+//===========================================================================
+  void insert(String xBrand, int xColor, int xWeight) {
+    //You should insert here statements to complete this function
+    if(xBrand.charAt(0) == 'A'){
+        return;
+    }
+    Node curr = root;
+    Node parent = null;
+    Bike b = new Bike(xBrand, xColor, xWeight);
+    Node newNode = new Node(b);
+    if(isEmpty()){
+            root = newNode; 
+            return;
+        }else{
+            curr = root;
+            parent = null;
+            while (true) {            
+                parent = curr;
+                if(curr.info.weight > b.weight){
+                    curr = curr.left;
+                    if(curr == null){
+                        parent.left = newNode;
+                         return;
+                    }
+                }else{
+                    curr = curr.right;
+                    if(curr == null){
+                        parent.right = newNode;
+                        return;
+                    }
+                }
+                if(curr.info.weight== b.weight){  
+                    return;
+                }
+            }
+        }
+   }
+
+//Do not edit this function. Your task is to complete insert function above only.
+  void f1() throws Exception {
+    clear();
+    loadData(1);
+    String fname = "f1.txt";
+    File g123 = new File(fname);
+    if(g123.exists()) g123.delete();
+    RandomAccessFile  f = new RandomAccessFile(fname, "rw"); 
+    breadth(root,f);
+    f.writeBytes("\r\n");
+    inOrder(root,f);
+    f.writeBytes("\r\n");
+    f.close();
+   }  
+  
+//=============================================================
+  void postOrder2(Node p, RandomAccessFile f) throws Exception {
+      if(p==null) return;
+      postOrder2(p.left,f);
+      postOrder2(p.right,f);
+      if(p.info.color < 7){
+          fvisit(p,f);
+      }
+     }
+  void f2() throws Exception {
+    clear();
+    loadData(5);
+    String fname = "f2.txt";
+    File g123 = new File(fname);
+    if(g123.exists()) g123.delete();
+    RandomAccessFile  f = new RandomAccessFile(fname, "rw"); 
+    postOrder(root,f);
+    f.writeBytes("\r\n");
+    //------------------------------------------------------------------------------------
+    /*You must keep statements pre-given in this function.
+      Your task is to insert statements here, just after this comment,
+      to complete the question in the exam paper.*/
+      postOrder2(root, f);
+
+
+    //------------------------------------------------------------------------------------
+    f.writeBytes("\r\n");
+    f.close();
+   }  
+
+//=============================================================
+  int count0=0;
+  public void deleteByCopying(Node x) {
+        if (isEmpty()) {
+            System.out.println("The tree is empty. No deletion.");
+            return;
+        }
+
+        Node p = root;
+        Node f = p;
+        while (p != null) {
+            if (p == x) {
+                break;
+            } else {
+                f = p;
+                if (x.info.weight < p.info.weight) {
+                    p = p.left;
+                } else {
+                    p = p.right;
+                }
+            }
+        }
+
+        if (p == null) {
+            System.out.println(x + " does not exist. No deletion.");
+            return;
+        }
+
+        // Case 1: p is a leaf node
+        if (p.left == null && p.right == null) {
+            if (root == p) {
+                root = null;
+                return;
+            }
+
+            if (f.left == p) {
+                f.left = null;
+            } else {
+                f.right = null;
+            }
+        }
+
+        // Case 2: p has only one child
+        if (p.left == null && p.right != null) { // p has right child
+            if (root == p) {
+                root = root.right;
+                return;
+            }
+
+            if (p == f.left) {
+                f.left = p.right;
+            } else {
+                f.right = p.right;
+            }
+        } else if (p.left != null && p.right == null) { // p has left child
+            if (root == p) {
+                root = root.left;
+                return;
+            }
+
+            if (p == f.left) {
+                f.left = p.left;
+            } else {
+                f.right = p.left;
+            }
+        }
+
+        // Case 3: p has both left and right children
+        if (p.left != null && p.right != null) {
+            Node s = p.left; // Find the rightmost node in the left subtree
+            Node fs = p; // Parent of s
+            while (s.right != null) {
+                fs = s;
+                s = s.right;
+            }
+
+            // Copying
+            p.info = s.info; // Replace p's key with s's key
+
+            // Deleting by copying
+            if (fs.left == s) {
+                fs.left = s.left;
+            } else {
+                fs.right = s.left;
+            }
+        }
+    }
+void breadth2(Node p, RandomAccessFile f) throws Exception {
+     if(p==null) return;
+     Queue q = new Queue();
+     q.enqueue(p);Node r;
+     while(!q.isEmpty()) {
+        r = q.dequeue();
+        if (r.left!=null && r.right!=null){
+            count0++;
+            if (count0==2){
+                deleteByCopying(r.right);
+                break;
+            }
+        }
+        if(r.left!=null) q.enqueue(r.left);
+        if(r.right!=null) q.enqueue(r.right);
+       }
+    }
+  void f3() throws Exception {
+    clear();
+    loadData(9);
+    String fname = "f3.txt";
+    File g123 = new File(fname);
+    if(g123.exists()) g123.delete();
+    RandomAccessFile  f = new RandomAccessFile(fname, "rw"); 
+    breadth(root,f);
+    f.writeBytes("\r\n");
+    //------------------------------------------------------------------------------------
+    /*You must keep statements pre-given in this function.
+      Your task is to insert statements here, just after this comment,
+      to complete the question in the exam paper.*/
+   
+    breadth2(root,f);
+    //------------------------------------------------------------------------------------
+    breadth(root,f);
+    f.writeBytes("\r\n");
+    f.close();
+   }  
+
+//=============================================================
+  
+  public void rotateL(Node par) {
+        
+        Node p = root;
+        Node gr = null;
+        while (p != null) {
+            if (p == par) {
+                break;
+            }
+            gr = p;
+            if (p.info.weight> par.info.weight) {
+                p = p.left;
+            } else {
+                p = p.right;
+            }
+        }
+
+        Node ch = par.right;
+        par.right = ch.left;
+        ch.left = par;
+        if (gr == null) {
+            root = ch;
+        } else if (gr.left == p) {
+            gr.left = ch;
+        } else if (gr.right == p) {
+            gr.right = ch;
+        }
+        
+    }
+    Node parent(int x) {
+        Node p = root;
+        Node parent = null;
+        while (p != null) {
+            if (p.info.weight == x) {
+                break;
+            }
+            parent = p;
+            if (p.info.color > x) {
+                p = p.left;
+            } else {
+                p = p.right;
+            }
+        }
+        return parent;
+    }  
+    
+  int MaxN(Node p, int n) {
+        int max = -1;
+        Queue q = new Queue();
+        q.enqueue(p);
+        if (n == 1) {
+            while (!q.isEmpty()) {
+                p = (Node) q.dequeue();
+                if (p.info.weight > max) {
+                    max = p.info.weight;
+                }
+                if (p.left != null) {
+                    q.enqueue(p.left);
+                }
+                if (p.right != null) {
+                    q.enqueue(p.right);
+                }
+            }
+        } else {
+            int maxN = MaxN(p, n - 1);
+            max = 0;
+            while (!q.isEmpty()) {
+                p = (Node) q.dequeue();
+                if (p.info.weight > max && p.info.weight < maxN) {
+                    max = p.info.weight;
+                }
+                if (p.left != null) {
+                    q.enqueue(p.left);
+                }
+                if (p.right != null) {
+                    q.enqueue(p.right);
+                }
+            }
+        }
+        return max;
+    }
+
+    
+
+ void f4() throws Exception {
+    clear();
+    loadData(13);;
+    String fname = "f4.txt";
+    File g123 = new File(fname);
+    if(g123.exists()) g123.delete();
+    RandomAccessFile  f = new RandomAccessFile(fname, "rw"); 
+    breadth(root,f);
+    f.writeBytes("\r\n");
+    //------------------------------------------------------------------------------------
+    /*You must keep statements pre-given in this function.
+      Your task is to insert statements here, just after this comment,
+      to complete the question in the exam paper.*/
+     int k = MaxN(root,1);
+     Node kParent = parent(k);
+        if (kParent != null) {
+            rotateL(kParent);
+        }
+
+     
+    //------------------------------------------------------------------------------------
+    breadth(root,f);
+    f.writeBytes("\r\n");
+    f.close();
+   }  

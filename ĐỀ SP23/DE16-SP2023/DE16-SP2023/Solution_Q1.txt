@@ -1,0 +1,283 @@
+//===========================================================================
+//(2)===YOU CAN EDIT OR EVEN ADD NEW FUNCTIONS IN THE FOLLOWING PART========
+//===========================================================================
+/* 
+   Khong su dung tieng Viet co dau de viet ghi chu.
+   Neu dung khi chay truc tiep se bao loi va nhan 0 diem
+*/
+  void addLast(String xBrand, int xColor, int xWeight) {
+    //You should write here appropriate statements to complete this function.
+    if(xBrand.charAt(0) == 'B'){
+        return;
+    }
+    Bike b = new Bike(xBrand, xColor, xWeight);
+    Node newNode = new Node(b);
+    if(isEmpty()){
+        head = tail = newNode;
+        return;
+    }
+    tail.next = newNode;
+    tail = newNode;
+   }
+
+  //You do not need to edit this function. Your task is to complete the addLast function above only.
+  void f1() throws Exception {
+     clear();
+     loadData(1);
+     String fname = "f1.txt";
+     File g123 = new File(fname);
+     if(g123.exists()) g123.delete();
+     RandomAccessFile  f = new RandomAccessFile(fname, "rw"); 
+     ftraverse(f);
+     f.close();
+    }  
+
+//==================================================================
+  void addFirst(Bike b){
+      Node newNode = new Node(b);
+      if(isEmpty()){
+          head = tail = newNode;
+          return;
+      }
+      newNode.next = head;
+      head = newNode;
+  }
+ 
+  void addPos(Bike b, int index){
+      Node newNode = new Node(b);
+      if(isEmpty()){
+          if(index == 0){
+          head = tail = newNode;
+          return;
+          }
+      }
+      Node temp = head;
+      if(index == 0){
+          addFirst(b);
+          return;
+      }
+      
+      int count = 0;
+      while(temp!=null){
+          if(index - count == 1){
+              newNode.next = temp.next;
+              temp.next = newNode;
+              if(temp == tail){
+                  tail = newNode;
+              }
+              return;
+          }
+          count++;
+          temp = temp.next;
+      }
+  }
+  void f2() throws Exception {
+     clear();
+     loadData(5);
+     String fname = "f2.txt";
+     File g123 = new File(fname);
+     if(g123.exists()) g123.delete();
+     RandomAccessFile  f = new RandomAccessFile(fname, "rw"); 
+     ftraverse(f);
+     Bike x, y;
+     x = new Bike("X",1,2);
+     y = new Bike("Y",3,4);
+     //------------------------------------------------------------------------------------
+     /*You must keep statements pre-given in this function.
+       Your task is to insert statements here, just after this comment,
+       to complete the question in the exam paper.*/
+      addPos(x, 1);
+      addPos(y, 4);
+
+    //------------------------------------------------------------------------------------
+     ftraverse(f);
+     f.close();
+    }  
+
+//==================================================================
+
+   int MaxAgeN() {
+        Node p = head;
+
+        int index = 0;
+
+        int max = p.info.color;
+        while (p.next != null) {
+            if (p.next.info.color > max) {
+                max = p.next.info.color;
+            }
+            p = p.next;
+        }
+        Node p1 = head;
+        while (p1.next != null) {
+            index++;
+            if (p1.info.color == max) {
+                break;
+            }
+            p1 = p1.next;
+        }
+
+        return index;
+    }
+
+int count=0;
+    void delNodeHaveValueX(int x) {
+        Node p = head;
+        int i = 0;
+        while (p != null) {
+            if (p.info.color == x){
+               count++;
+            if (count == 2) {
+                delPosition(i);  // Call the delete position method to remove the node at index i
+                break;  // Exit the loop after removing the node
+            }
+            }
+            i++;
+            p = p.next;
+        }
+     
+    }
+    
+    void delPosition(int pos) {
+        // pos must != 0 and != size() - 1        
+        Node p = head;
+        while (pos-- > 1) {
+            p = p.next;
+        }
+        p.next = p.next.next;
+    }
+
+
+void f3() throws Exception {
+    clear();
+    loadData(9);
+    String fname = "f3.txt";
+    File g123 = new File(fname);
+    if(g123.exists()) g123.delete();
+    RandomAccessFile  f = new RandomAccessFile(fname, "rw"); 
+    ftraverse(f);
+    //------------------------------------------------------------------------------------
+     /*You must keep statements pre-given in this function.
+       Your task is to insert statements here, just after this comment,
+       to complete the question in the exam paper.*/
+     delNodeHaveValueX(MaxAgeN());
+    //------------------------------------------------------------------------------------
+    ftraverse(f);
+    f.close();
+   }
+
+//==================================================================
+   
+  void f4() throws Exception {
+    clear();
+    loadData(13);
+    String fname = "f4.txt";
+    File g123 = new File(fname);
+    if(g123.exists()) g123.delete();
+    RandomAccessFile  f = new RandomAccessFile(fname, "rw"); 
+    ftraverse(f);
+    //------------------------------------------------------------------------------------
+     /*You must keep statements pre-given in this function.
+       Your task is to insert statements here, just after this comment,
+       to complete the question in the exam paper.*/
+      sortByAge(0,3);
+      
+      sort(indexLast()-2,indexLast());
+     
+    //------------------------------------------------------------------------------------
+    ftraverse(f);
+    f.close();
+   }
+  int indexLast() {
+        int index1 = 0;
+        Node p = head;
+        while (p.next != null) {
+            index1++;
+            p = p.next;
+        }
+        return index1;
+    }
+   
+    int size(){
+        int i=0;
+        Node p = head;
+        while (p != null){
+            i++;
+            p=p.next;
+        }
+        return i;
+    }
+     Node pos(int k){
+        int i=0;
+        Node p = head;
+        while(p!=null){
+            if (i==k){
+                return (p);
+            }
+            i++;
+            p=p.next;
+        }
+        return (null);
+    }
+   void sortByAge(int k,int h){
+        if (k>h){
+            return;
+        }
+        if (k<h){
+            k=0;
+        }
+        int n=size();
+        if (h>n-1){
+            h=n-1;
+        }
+        Node u=pos(k);
+        Node v=pos(h+1);
+        Node pi,pj ;
+        Bike x;
+        pi=u;
+        while (pi !=v){
+            pj=pi.next;
+            while (pj != v){
+                if (pj.info.color<pi.info.color)
+                {
+                    x=pi.info;
+                    pi.info=pj.info;
+                    pj.info=x;
+                }
+                pj=pj.next;
+            }
+            pi=pi.next;          
+        }
+    }
+    void sort(int startIndex, int endIndex) {       
+        int count = 0,m=0;
+        Bike tmp;
+        Node p = head,i;
+        while (p.next != null) {
+            if (count == startIndex) {
+                for (; p != null; p = p.next) {
+                    int n=0;
+                    for (i = p.next; i != null; i = i.next) {
+                        if (p.info.color < i.info.color) {
+                            tmp = p.info;
+                            p.info = i.info;
+                            i.info = tmp;
+                        }
+                        n++;
+                        if (m+n==endIndex-startIndex) {
+                            break;
+                        }
+                    }
+                    if (m+1==endIndex-startIndex) {
+                        break;
+                    }
+                    m++;
+                }
+                break;
+            }
+            count++;
+            p = p.next;
+        }
+    }
+
+ 
